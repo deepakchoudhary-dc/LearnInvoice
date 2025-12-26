@@ -64,6 +64,4 @@ Each `engine.run` returns:
 
 `npm run demo` executes `src/demo.ts`, which resets `memory.db`, replays invoices with/without human corrections, and prints outputs showing learning over time.
 
-## Video & GitHub
 
-Please record a short screen capture of `npm run demo` output and the resulting `memory.db` inspection. Push this repo to GitHub and share the link along with the video URL as requested.
