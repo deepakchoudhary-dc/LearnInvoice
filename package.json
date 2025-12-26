@@ -1,0 +1,23 @@
+{
+  "name": "invoice-memory-agent",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc --noEmit",
+    "demo": "tsx src/demo.ts",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "better-sqlite3": "9.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "22.7.6",
+    "ts-node": "10.9.2",
+    "tsx": "4.19.2",
+    "typescript": "5.6.3"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

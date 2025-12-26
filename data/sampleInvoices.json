@@ -1,0 +1,137 @@
+[
+  {
+    "invoice": {
+      "id": "INV-A-001",
+      "vendor": "Supplier GmbH",
+      "invoiceNumber": "A-001",
+      "issueDate": "2025-01-03",
+      "serviceDate": null,
+      "currency": "EUR",
+      "vendorFields": { "Leistungsdatum": "2025-01-05" },
+      "rawText": "Lieferant: Supplier GmbH\nRechnung A-001\nLeistungsdatum 05.01.2025\nEUR 1.000,00"
+    },
+    "human": {
+      "serviceDate": "2025-01-05"
+    }
+  },
+  {
+    "invoice": {
+      "id": "INV-A-003",
+      "vendor": "Supplier GmbH",
+      "invoiceNumber": "A-003",
+      "issueDate": "2025-01-10",
+      "serviceDate": null,
+      "poNumber": null,
+      "currency": "EUR",
+      "vendorFields": { "Leistungsdatum": "2025-01-10" },
+      "rawText": "Supplier GmbH invoice A-003 PO-A-051 EUR 2,000"
+    },
+    "human": {
+      "serviceDate": "2025-01-10",
+      "poNumber": "PO-A-051"
+    }
+  },
+  {
+    "invoice": {
+      "id": "INV-A-005",
+      "vendor": "Supplier GmbH",
+      "invoiceNumber": "A-005",
+      "issueDate": "2025-02-01",
+      "serviceDate": null,
+      "poNumber": null,
+      "currency": "EUR",
+      "vendorFields": { "Leistungsdatum": "2025-02-01" },
+      "rawText": "Supplier GmbH invoice A-005 EUR 3,000"
+    },
+    "human": null
+  },
+  {
+    "invoice": {
+      "id": "INV-B-001",
+      "vendor": "Parts AG",
+      "invoiceNumber": "B-001",
+      "issueDate": "2025-01-12",
+      "vatInclusiveHint": true,
+      "totalGross": 1190,
+      "vatRate": 0.19,
+      "currency": null,
+      "rawText": "Parts AG Prices inkl. MwSt. EUR"
+    },
+    "human": {
+      "totalNet": 1000,
+      "currency": "EUR"
+    }
+  },
+  {
+    "invoice": {
+      "id": "INV-B-002",
+      "vendor": "Parts AG",
+      "invoiceNumber": "B-002",
+      "issueDate": "2025-02-15",
+      "vatInclusiveHint": true,
+      "totalGross": 2380,
+      "vatRate": 0.19,
+      "currency": null,
+      "rawText": "Parts AG Prices incl. VAT"
+    },
+    "human": null
+  },
+  {
+    "invoice": {
+      "id": "INV-C-001",
+      "vendor": "Freight & Co",
+      "invoiceNumber": "C-001",
+      "issueDate": "2025-01-20",
+      "currency": "EUR",
+      "items": [
+        { "description": "Seefracht/Shipping", "quantity": 1, "unitPrice": 500 }
+      ],
+      "rawText": "Freight & Co Skonto 2% innerhalb 10 Tage"
+    },
+    "human": {
+      "items": [
+        { "description": "Seefracht/Shipping", "quantity": 1, "unitPrice": 500, "sku": "FREIGHT" }
+      ]
+    }
+  },
+  {
+    "invoice": {
+      "id": "INV-C-002",
+      "vendor": "Freight & Co",
+      "invoiceNumber": "C-002",
+      "issueDate": "2025-02-05",
+      "currency": "EUR",
+      "items": [
+        { "description": "Shipping charge", "quantity": 1, "unitPrice": 700 }
+      ],
+      "rawText": "Freight & Co Skonto 2% innerhalb 10 Tage"
+    },
+    "human": null
+  },
+  {
+    "invoice": {
+      "id": "INV-A-004",
+      "vendor": "Supplier GmbH",
+      "invoiceNumber": "A-001",
+      "issueDate": "2025-01-03",
+      "currency": "EUR",
+      "rawText": "Duplicate of A-001"
+    },
+    "human": {
+      "invoiceNumber": "A-001",
+      "vendor": "Supplier GmbH",
+      "issueDate": "2025-01-03"
+    }
+  },
+  {
+    "invoice": {
+      "id": "INV-A-004-RUN2",
+      "vendor": "Supplier GmbH",
+      "invoiceNumber": "A-001",
+      "issueDate": "2025-01-03",
+      "currency": "EUR",
+      "rawText": "Duplicate of A-001 again"
+    },
+    "human": null
+  }
+]
