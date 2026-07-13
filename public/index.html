@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Invoice Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- html2pdf.js for client-side PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar / Controls (The Builder) -->
+        <aside class="sidebar no-print">
+            <div class="sidebar-header">
+                <div class="brand">
+                    <h1>InvoiceGen.</h1>
+                    <p>Professional & Local</p>
+                </div>
+            </div>
+            
+            <div class="builder-content">
+                <div class="form-section">
+                    <h3>Settings</h3>
+                    <div class="grid-2">
+                        <div class="control-group">
+                            <label>Theme Color</label>
+                            <input type="color" id="theme-color" value="#0ea5e9">
+                        </div>
+                        <div class="control-group">
+                            <label>Currency</label>
+                            <select id="currency-select">
+                                <option value="$">USD ($)</option>
+                                <option value="€">EUR (€)</option>
+                                <option value="£">GBP (£)</option>
+                                <option value="₹">INR (₹)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Your Company</h3>
+                    <div class="grid-2">
+                        <input type="text" id="company-name" placeholder="Company Name" value="My Company LLC" data-sync="prev-company-name">
+                        <input type="text" id="company-email" placeholder="Email" value="hello@company.com" data-sync="prev-company-email">
+                        <input type="text" id="company-address" placeholder="Address" value="123 Main St, City, ST 12345" data-sync="prev-company-address">
+                        <input type="text" id="company-tax" placeholder="Tax ID / VAT" value="TAX-12345678" data-sync="prev-company-tax">
+                        <div class="full-width">
+                            <label class="btn btn-secondary file-label full-width" for="logo-upload">Upload Logo Image</label>
+                            <input type="file" id="logo-upload" accept="image/*" style="display:none;">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Billed To</h3>
+                    <div class="grid-2">
+                        <input type="text" id="client-name" placeholder="Client Name" value="Client Corp" data-sync="prev-client-name">
+                        <input type="text" id="client-email" placeholder="Client Email" value="billing@clientcorp.com" data-sync="prev-client-email">
+                        <textarea class="full-width" id="client-address" placeholder="Client Address" data-sync="prev-client-address">456 Client Blvd&#10;City, ST 67890</textarea>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Invoice Meta</h3>
+                    <div class="grid-2">
+                        <div>
+                            <label>Invoice Number</label>
+                            <input type="text" id="invoice-number" value="INV-001" data-sync="prev-invoice-number">
+                        </div>
+                        <div>
+                            <label>Terms</label>
+                            <input type="text" id="payment-terms" value="Net 30" data-sync="prev-payment-terms">
+                        </div>
+                        <div>
+                            <label>Issue Date</label>
+                            <input type="date" id="issue-date" data-sync="prev-issue-date">
+                        </div>
+                        <div>
+                            <label>Due Date</label>
+                            <input type="date" id="due-date" data-sync="prev-due-date">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Line Items (Drag to reorder)</h3>
+                    <div id="items-container">
+                        <!-- Items injected by JS -->
+                    </div>
+                    <button id="btn-add-item" class="btn btn-secondary btn-sm" style="width:100%; margin-top:0.5rem;">+ Add Item</button>
+                </div>
+
+                <div class="form-section">
+                    <h3>Financials</h3>
+                    <div class="grid-2">
+                        <div>
+                            <label>Tax Rate (%)</label>
+                            <input type="number" id="tax-rate" value="0" min="0" step="0.1">
+                        </div>
+                        <div>
+                            <label>Discount (%)</label>
+                            <input type="number" id="discount-rate" value="0" min="0" step="0.1">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Footer & Signature</h3>
+                    <textarea id="notes" placeholder="Payment Instructions / Notes" data-sync="prev-notes">Please transfer funds to:&#10;Bank: Global Bank&#10;Account: 123456789</textarea>
+                    <div class="mt-2" style="margin-top: 1rem;">
+                        <label class="btn btn-secondary file-label full-width" for="signature-upload">Upload Signature Image</label>
+                        <input type="file" id="signature-upload" accept="image/*" style="display:none;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sticky Bottom Actions -->
+            <div class="actions">
+                <button id="btn-export-json" class="btn btn-secondary">Save JSON</button>
+                <label for="btn-import-json" class="btn btn-secondary file-label">Load JSON</label>
+                <input type="file" id="btn-import-json" accept=".json" style="display:none;">
+                <button id="btn-download-pdf" class="btn btn-primary full-width">Download PDF</button>
+            </div>
+        </aside>
+
+        <!-- Main Content: Preview Panel (Multi-page container) -->
+        <main class="main-content">
+            <section class="preview-panel" id="invoice-preview-container">
+                <!-- A4 Pages are dynamically injected here by app.js based on content height -->
+            </section>
+        </main>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

@@ -4,14 +4,12 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "start": "tsx src/server.ts",
     "build": "tsc --noEmit",
-    "demo": "tsx src/demo.ts",
     "lint": "tsc --noEmit"
   },
-  "dependencies": {
-    "better-sqlite3": "9.4.3"
-  },
   "devDependencies": {
+    "@types/express": "^5.0.6",
     "@types/node": "22.7.6",
     "ts-node": "10.9.2",
     "tsx": "4.19.2",
@@ -19,5 +17,9 @@
   },
   "engines": {
     "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "open": "^11.0.0"
   }
 }
