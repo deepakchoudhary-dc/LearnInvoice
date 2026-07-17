@@ -1,22 +1,24 @@
 import express from 'express';
 import path from 'path';
-import open from 'open';
 import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
-const PORT = process.env.PORT || 3000;
+const port = Number(process.env.PORT ?? 3000);
+const host = process.env.HOST ?? '127.0.0.1';
 
-// Serve static files from the 'public' directory
-app.use(express.static(path.join(__dirname, '../public')));
+app.disable('x-powered-by');
+app.use((_request, response, next) => {
+  response.setHeader('Content-Security-Policy', "default-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; img-src 'self' data: blob:; object-src 'none'; script-src 'self'; style-src 'self'");
+  response.setHeader('Referrer-Policy', 'no-referrer');
+  response.setHeader('X-Content-Type-Options', 'nosniff');
+  response.setHeader('X-Frame-Options', 'DENY');
+  response.setHeader('Cross-Origin-Resource-Policy', 'same-origin');
+  response.setHeader('Cache-Control', 'no-store');
+  next();
+});
+app.use(express.static(path.join(__dirname, '../public'), { index: 'index.html', fallthrough: false }));
 
-app.listen(PORT, async () => {
-    console.log(`Invoice Generator is running at http://localhost:${PORT}`);
-    try {
-        await open(`http://localhost:${PORT}`);
-    } catch (err) {
-        console.log("Could not open browser automatically. Please open the URL manually.");
-    }
+app.listen(port, host, () => {
+  console.log(`Ledgerly runs locally at http://${host}:${port}`);
 });

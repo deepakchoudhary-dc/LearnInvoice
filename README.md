@@ -1,76 +1,55 @@
-# 📄 Ultimate Smart Invoice Generator
-*(Formerly Invoice Memory Agent)*
+# Ledgerly — Free Offline Invoice Software for Traders and Small Businesses
 
-A premium, privacy-first, and lightning-fast invoice generation workspace. Designed with a modern SaaS aesthetic, this application empowers you to create, manage, and export professional invoices without relying on external APIs, databases, or third-party AI services. Everything runs **100% locally** on your machine.
+Ledgerly is built for traders, shop owners, wholesalers, service businesses, freelancers, and small enterprises that need professional invoicing without subscriptions, AI, surveillance, or forced third-party services.
 
----
+The goal is simple: give every business access to private, capable invoice software that works on its own machine and keeps financial records under the owner's control.
 
-## 🌟 Core Features
+## Why Ledgerly
 
-### 1. Seamless 3-Pane Workspace
-The UI is divided into a professional 3-pane layout designed to maximize productivity and reduce cognitive load:
-*   **Navigation & Settings**: A dark-mode sidebar for global settings (Theme Color, Currency) and local JSON Template Import/Export.
-*   **The Workstation**: The central column where data is entered. It features two tabs: the standard manual "Builder" and the powerful "⚡ Smart Tools".
-*   **Live Preview Engine**: A real-time, precisely paginated A4 document preview that updates instantly with every keystroke.
+- Works locally and does not depend on a cloud account, AI service, analytics service, payment gateway, font CDN, or PDF CDN.
+- Protects saved data in a password-encrypted local vault.
+- Creates invoices, quotations/proformas, and credit notes.
+- Keeps customer and product/service catalogs with HSN/SAC, GSTIN, tax rates, pricing, and units.
+- Supports GST/VAT/no-tax documents, per-line discounts, multiple currencies, payment instructions, partial payments, overdue tracking, and credit notes.
+- Provides local reports for receivables, customer sales, document history, and audit events.
+- Exports encrypted backups, audit CSV files, and IRP-ready invoice draft JSON.
+- Uses the browser's native Print / Save as PDF flow, so PDF creation also works offline.
 
-### 2. Enterprise Multi-Page A4 Engine
-Never worry about long invoices breaking your format.
-*   If you add dozens of line items, the system intelligently calculates the exact pixel height and seamlessly spills the table over to a new A4 page within the preview.
-*   Generates flawless PDFs with perfect page breaks—guaranteeing that rows are never cut in half during export.
+## Who it is for
 
-### 3. "Smart Tools" (100% Local Intelligence)
-Located in the center pane, these tools provide advanced automation but execute completely offline using highly optimized vanilla JavaScript:
-*   **⚡ Command Parser**: Type commands like `discount 15%` or `due today`, hit Execute, and watch the invoice update instantly.
-*   **📝 Smart Text Extract**: Paste a messy email or meeting notes into the Magic Paste box. The local parser scans the text for keywords and prices, automatically building your line items.
-*   **🔍 Local Auditor**: Validate your invoice before sending. The system checks for anomalies like past-due dates, missing tax IDs, or unusually high discounts.
-*   **✉️ Reminders Generator**: Instantly draft a perfectly formatted, professional payment reminder email containing the client's information, invoice number, and total due.
+Ledgerly is for people who want billing software that serves their business—not software that sells their financial data, locks their records behind subscriptions, or forces them to rely on AI.
 
-### 4. Advanced Interactivity
-*   **Drag-and-Drop Sorting**: Reorder your line items visually by dragging the `⋮⋮` handle up or down.
-*   **Click-to-Edit**: Click directly on the Client Name, Address, or Notes right on the live A4 preview to type and edit them without breaking your workflow.
+You can use it for a retail shop, wholesale trade, professional service, local manufacturing business, repair center, freelancer practice, or any small business that needs clear invoices and trustworthy records.
 
----
+## Run locally
 
-## 🚀 Getting Started
-
-### Prerequisites
-*   [Node.js](https://nodejs.org/) (v16.x or higher)
-*   npm (installed alongside Node.js)
-
-### Installation
-1. Clone or download the repository to your local machine.
-2. Navigate to the project directory:
-   ```bash
-   cd LearnInvoice
-   ```
-3. Install the minimal local dependencies:
-   ```bash
-   npm install
-   ```
-
-### Running the Application
-To start the local server and open the application in your browser, simply run:
-```bash
+```powershell
+cd LearnInvoice
+npm install
 npm run start
 ```
-The server will automatically launch the Ultimate Smart Invoice Generator on `http://localhost:3000`.
 
----
+Open the local URL printed by the server. By default it runs only on `127.0.0.1`.
 
-## 🏗️ Architecture & Tech Stack
+## India GST / e-invoice note
 
-This project strictly adheres to a zero-API, local-first philosophy to ensure absolute data privacy for your financial documents.
+Ledgerly can prepare, audit, print, and export invoice data offline. It can export an IRP-ready draft, but an official IRN and signed QR code must still be issued by the authorised Invoice Registration Portal.
 
-*   **Frontend UI**: Vanilla HTML5 and CSS3 (utilizing Custom Properties and Flexbox/CSS Grid).
-*   **Frontend Logic**: Vanilla JavaScript (ES6+), handling complex multi-page pagination, drag-and-drop APIs, and localized "Smart" parsing algorithms.
-*   **PDF Generation**: Utilizes `html2pdf.js` via CDN for client-side rendering.
-*   **Backend / Serving**: A highly minimal Node.js / Express server for securely serving the static assets to your local browser.
-*   **Data Persistence**: Relies on secure JSON file export/import, keeping your client data out of the cloud.
+## Protect your records
 
----
+Your vault password cannot be recovered. Keep it in a password manager and keep encrypted backups in a separate safe location.
 
-## 🤝 Contributing
-Contributions, issues, and feature requests are welcome. Feel free to check the issues page if you want to contribute to the local smart algorithms or the UI layout.
+## Development checks
 
-## 📝 License
-This project is open-source and available under the standard MIT License.
+```powershell
+npm test
+npm audit --omit=dev --audit-level=moderate
+```
+
+## Contributing
+
+Contributions are welcome. Keep the project offline-first, privacy-first, accessible to small businesses, and free from compulsory AI or third-party service dependencies.
+
+## License
+
+Licensed under the [MIT License](LICENSE). Use it, improve it, share it, and help make dependable invoicing software available to everyone.

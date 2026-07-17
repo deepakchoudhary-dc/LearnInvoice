@@ -1,179 +1,67 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate Smart Invoice Generator</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <link rel="icon" href="data:,">
+  <!-- Content Security Policy: Strict Offline First -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self';">
+  <title>Ledgerly – Offline Invoice Vault</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Overlay for Generative Drafts -->
-    <div id="ai-modal" class="modal">
-        <div class="modal-content">
-            <span id="close-modal" class="close">&times;</span>
-            <h2 id="modal-title">Smart Output</h2>
-            <textarea id="modal-text" rows="10"></textarea>
-            <button id="modal-copy-btn" class="btn btn-primary">Copy to Clipboard</button>
+  <div id="vault-gate" class="gate" aria-live="polite">
+    <section class="gate-card">
+      <p class="eyebrow">LOCAL • OFFLINE • YOUR DATA</p>
+      <h1>Ledgerly Invoice Vault</h1>
+      <p id="gate-copy">Create a password to encrypt this device's invoice vault. Nothing is sent to a server.</p>
+      <label for="vault-password">Vault password</label>
+      <input id="vault-password" type="password" autocomplete="new-password" minlength="12" placeholder="At least 12 characters">
+      <p id="gate-message" class="message"></p>
+      <button id="vault-submit" class="button primary">Create encrypted vault</button>
+      <button id="vault-demo" class="button link">Use a temporary demo (not saved)</button>
+    </section>
+  </div>
+  <div id="app" class="shell" hidden>
+    <aside class="sidebar no-print">
+      <div class="brand"><span class="brand-mark">L</span><span>Ledgerly</span></div>
+      <p class="sidebar-caption">Offline invoice vault</p>
+      <nav aria-label="Main navigation">
+        <button class="nav active" data-page="dashboard">Overview</button>
+        <button class="nav" data-page="invoice">New document</button>
+        <button class="nav" data-page="documents">Documents</button>
+        <button class="nav" data-page="customers">Customers</button>
+        <button class="nav" data-page="products">Products & services</button>
+        <button class="nav" data-page="reports">Reports</button>
+        <button class="nav" data-page="backup">Vault & backup</button>
+      </nav>
+      <div class="sidebar-footer">
+        <button id="lock-vault" class="button subtle full">Lock vault</button>
+        <small id="save-status">Local vault ready</small>
+      </div>
+    </aside>
+    <main class="main">
+      <header class="topbar no-print">
+        <div>
+          <p id="page-kicker" class="eyebrow">OVERVIEW</p>
+          <h1 id="page-title">Business at a glance</h1>
         </div>
-    </div>
-
-    <div class="app-container">
-        
-        <!-- PANE 1: Global Navigation & Settings -->
-        <nav class="pane-nav no-print">
-            <div class="brand">
-                <h1>InvoiceGen</h1>
-                <p>Smart Edition (Local)</p>
-            </div>
-            
-            <div class="nav-section">
-                <h3>Settings</h3>
-                <div class="control-group">
-                    <label>Theme Color</label>
-                    <input type="color" id="theme-color" value="#10b981">
-                </div>
-                <div class="control-group">
-                    <label>Currency</label>
-                    <select id="currency-select">
-                        <option value="$">USD ($)</option>
-                        <option value="€">EUR (€)</option>
-                        <option value="£">GBP (£)</option>
-                        <option value="₹">INR (₹)</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="nav-section mt-auto">
-                <h3>Templates</h3>
-                <div class="actions">
-                    <button id="btn-export-json" class="btn btn-secondary full-width">Export Data</button>
-                    <label for="btn-import-json" class="btn btn-secondary file-label full-width">Import Data</label>
-                    <input type="file" id="btn-import-json" accept=".json" style="display:none;">
-                </div>
-            </div>
-        </nav>
-
-        <!-- PANE 2: The Workstation (Builder + Smart Tools) -->
-        <aside class="pane-builder no-print">
-            <div class="tabs">
-                <button class="tab-btn active" data-target="tab-manual">Builder</button>
-                <button class="tab-btn ai-tab" data-target="tab-ai">⚡ Smart Tools</button>
-            </div>
-
-            <div class="tab-content active" id="tab-manual">
-                <div class="form-section">
-                    <h3>Your Company</h3>
-                    <div class="grid-2">
-                        <input type="text" id="company-name" placeholder="Company Name" value="My Company LLC" data-sync="prev-company-name">
-                        <input type="text" id="company-email" placeholder="Email" value="hello@company.com" data-sync="prev-company-email">
-                        <input type="text" id="company-address" placeholder="Address" value="123 Main St, City, ST" data-sync="prev-company-address">
-                        <input type="text" id="company-tax" placeholder="Tax ID" value="TAX-1234" data-sync="prev-company-tax">
-                        <label class="btn btn-secondary file-label full-width" for="logo-upload">Upload Logo Image</label>
-                        <input type="file" id="logo-upload" accept="image/*" style="display:none;">
-                    </div>
-                </div>
-
-                <div class="form-section">
-                    <h3>Billed To</h3>
-                    <div class="grid-2">
-                        <input type="text" id="client-name" placeholder="Client Name" value="Client Corp" data-sync="prev-client-name">
-                        <input type="text" id="client-email" placeholder="Client Email" value="billing@client.com" data-sync="prev-client-email">
-                        <textarea class="full-width" id="client-address" placeholder="Client Address" data-sync="prev-client-address">456 Client Blvd</textarea>
-                    </div>
-                </div>
-
-                <div class="form-section">
-                    <h3>Invoice Meta</h3>
-                    <div class="grid-2">
-                        <input type="text" id="invoice-number" value="INV-001" data-sync="prev-invoice-number">
-                        <input type="text" id="payment-terms" value="Net 30" data-sync="prev-payment-terms">
-                        <input type="date" id="issue-date" data-sync="prev-issue-date">
-                        <input type="date" id="due-date" data-sync="prev-due-date">
-                    </div>
-                </div>
-
-                <div class="form-section">
-                    <h3>Line Items (Drag to reorder)</h3>
-                    <div id="items-container"></div>
-                    <button id="btn-add-item" class="btn btn-secondary btn-sm full-width mt-2">+ Add Item</button>
-                </div>
-
-                <div class="form-section">
-                    <h3>Financials</h3>
-                    <div class="grid-2">
-                        <div>
-                            <label>Tax (%)</label>
-                            <input type="number" id="tax-rate" value="0" min="0" step="0.1">
-                        </div>
-                        <div>
-                            <label>Discount (%)</label>
-                            <input type="number" id="discount-rate" value="0" min="0" step="0.1">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-section">
-                    <h3>Footer</h3>
-                    <textarea id="notes" placeholder="Notes" data-sync="prev-notes">Bank: Global Bank</textarea>
-                    <label class="btn btn-secondary file-label full-width mt-2" for="signature-upload">Upload Signature</label>
-                    <input type="file" id="signature-upload" accept="image/*" style="display:none;">
-                </div>
-            </div>
-
-            <!-- SMART TOOLS TAB -->
-            <div class="tab-content ai-panel" id="tab-ai">
-                
-                <div class="ai-feature-card">
-                    <h4>⚡ Command Parser</h4>
-                    <p>Type local commands to change the invoice instantly.</p>
-                    <div class="chat-input-group">
-                        <input type="text" id="ai-chat-input" placeholder="e.g. Set discount to 10%...">
-                        <button id="btn-ai-chat" class="btn btn-primary">Execute</button>
-                    </div>
-                    <p id="chat-feedback" class="ai-feedback"></p>
-                </div>
-
-                <div class="ai-feature-card">
-                    <h4>📝 Smart Text Extract</h4>
-                    <p>Paste an email or rough notes to auto-fill line items locally.</p>
-                    <textarea id="ai-paste-input" rows="4" placeholder="e.g. We did 10 hours of web dev at $50/hr and server hosting for $100..."></textarea>
-                    <button id="btn-ai-paste" class="btn btn-secondary full-width mt-2">Extract Line Items</button>
-                    <p id="paste-feedback" class="ai-feedback"></p>
-                </div>
-
-                <div class="ai-feature-card">
-                    <h4>🔍 Local Auditor</h4>
-                    <p>Audit this invoice for errors before sending.</p>
-                    <button id="btn-ai-audit" class="btn btn-secondary full-width">Run Audit</button>
-                    <div id="audit-results" class="audit-results" style="display:none;"></div>
-                </div>
-
-                <div class="ai-feature-card">
-                    <h4>✉️ Reminders Generator</h4>
-                    <p>Draft a professional payment reminder email locally.</p>
-                    <button id="btn-ai-email" class="btn btn-secondary full-width">Generate Draft</button>
-                </div>
-            </div>
-            
-        </aside>
-
-        <!-- PANE 3: Live Preview (A4 Multi-page) -->
-        <main class="pane-preview" id="preview-wrapper">
-            <!-- Floating action bar inside preview -->
-            <div class="preview-actions no-print">
-                <button id="btn-download-pdf" class="btn btn-primary">Download PDF</button>
-            </div>
-            
-            <div id="invoice-preview-container">
-                <!-- A4 Pages injected by JS -->
-            </div>
-        </main>
-
-    </div>
-    <script src="app.js"></script>
+        <div class="top-actions">
+          <select id="company-switcher" aria-label="Active company"></select>
+          <button id="new-invoice" class="button primary">+ New invoice</button>
+        </div>
+      </header>
+      <section id="page-dashboard" class="page active"></section>
+      <section id="page-invoice" class="page"></section>
+      <section id="page-documents" class="page"></section>
+      <section id="page-customers" class="page"></section>
+      <section id="page-products" class="page"></section>
+      <section id="page-reports" class="page"></section>
+      <section id="page-backup" class="page"></section>
+    </main>
+  </div>
+  <input id="import-file" type="file" accept="application/json,.json" hidden>
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>
