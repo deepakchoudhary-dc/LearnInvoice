@@ -1,6 +1,6 @@
 # Ledgerly — Free Offline Invoice Software for Traders and Small Businesses
 
-Ledgerly is built for traders, shop owners, wholesalers, service businesses, freelancers, and small enterprises that need professional invoicing without subscriptions, AI, surveillance, or forced third-party services.
+Ledgerly is built for traders, shop owners, wholesalers, service businesses, freelancers, and small enterprises that need professional invoicing without subscriptions, AI, surveillance, or forced third-party services, will implement advanced features offline.
 
 The goal is simple: give every business access to private, capable invoice software that works on its own machine and keeps financial records under the owner's control.
 
