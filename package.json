@@ -7,7 +7,7 @@
     "start": "tsx src/server.ts",
     "build": "tsc --noEmit",
     "lint": "tsc --noEmit",
-    "test": "node --test src/tests/"
+    "test": "node src/tests/math.test.js && node src/tests/gst.test.js && node src/tests/documents.test.js && node src/tests/csv.test.js && node src/tests/backup.test.js && node src/tests/complete_business.test.js"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
@@ -16,10 +16,6 @@
     "tsx": "4.19.2",
     "typescript": "5.6.3"
   },
-  "engines": {
-    "node": ">=18"
-  },
-  "dependencies": {
-    "express": "^5.2.1"
-  }
+  "engines": { "node": ">=18" },
+  "dependencies": { "express": "^5.2.1" }
 }
