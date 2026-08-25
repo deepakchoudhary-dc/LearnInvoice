@@ -1,6 +1,6 @@
 import { encryptData, decryptData, isVaultUnlocked } from './crypto.js';
 
-const DB_NAME = 'OfflineInvoiceDB';
+export const DB_NAME = 'OfflineInvoiceDB';
 const DB_VERSION = 3;
 const STORE_NAMES = ['companies', 'customers', 'products', 'documents', 'expenses', 'recurring', 'audit', 'snapshots'];
 let dbPromise;

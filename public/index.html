@@ -1,13 +1,78 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="no-referrer"><link rel="icon" href="data:,">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; style-src 'self'; script-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; object-src 'none'">
-  <title>Ledgerly – Offline Invoice Vault</title><link rel="stylesheet" href="style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <link rel="icon" href="data:,">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; style-src 'self'; script-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
+  <title>Ledgerly — Offline Invoice Vault</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="vault-gate" class="gate" aria-live="polite"><section class="gate-card"><p class="eyebrow">LOCAL • OFFLINE • YOUR DATA</p><h1>Ledgerly Invoice Vault</h1><p id="gate-copy">Create a password to encrypt this device's invoice vault. Nothing is sent to a server.</p><label for="vault-password">Vault password</label><input id="vault-password" type="password" autocomplete="new-password" minlength="12" placeholder="At least 12 characters"><p id="gate-message" class="message"></p><button id="vault-submit" class="button primary">Unlock / create vault</button><button id="vault-demo" class="button link">Use a temporary demo (not saved)</button></section></div>
-  <div id="app" class="shell" hidden><aside class="sidebar no-print"><div class="brand"><span class="brand-mark">L</span><span>Ledgerly</span></div><p class="sidebar-caption">Offline invoice vault</p><nav aria-label="Main navigation"><button class="nav active" data-page="dashboard">Overview</button><button class="nav" data-page="invoice">New document</button><button class="nav" data-page="documents">Documents</button><button class="nav" data-page="pos">Point of Sale</button><button class="nav" data-page="customers">Customers</button><button class="nav" data-page="products">Products & inventory</button><button class="nav" data-page="reports">Reports</button><button class="nav" data-page="expenses">Expenses</button><button class="nav" data-page="recurring">Recurring</button><button class="nav" data-page="backup">Business, backup & audit</button></nav><div class="sidebar-footer"><button id="lock-vault" class="button subtle full">Lock vault</button><small id="save-status">Local vault ready</small></div></aside><main class="main"><header class="topbar no-print"><div><p id="page-kicker" class="eyebrow">OVERVIEW</p><h1 id="page-title">Business at a glance</h1></div><div class="top-actions"><select id="company-switcher" aria-label="Active company"></select><button id="new-invoice" class="button primary">+ New document</button></div></header><section id="page-dashboard" class="page active"></section><section id="page-invoice" class="page"></section><section id="page-documents" class="page"></section><section id="page-pos" class="page"></section><section id="page-customers" class="page"></section><section id="page-products" class="page"></section><section id="page-reports" class="page"></section><section id="page-expenses" class="page"></section><section id="page-recurring" class="page"></section><section id="page-backup" class="page"></section></main></div>
-  <script type="module" src="js/main.js"></script>
+
+  <!-- Vault gate -->
+  <div id="gate" class="gate">
+    <div class="gate-scene" aria-hidden="true">
+      <div class="glow glow-a"></div>
+      <div class="glow glow-b"></div>
+    </div>
+    <section class="gate-card">
+      <div class="gate-brand"><span class="brand-mark">L</span><span>Ledgerly</span></div>
+      <h1 id="gate-title">Your invoice vault</h1>
+      <p id="gate-copy" class="muted">Everything is stored encrypted on this device only. Create a password (first time) or enter it to unlock.</p>
+      <label for="vault-password">Vault password</label>
+      <div class="field">
+        <input id="vault-password" type="password" autocomplete="current-password" minlength="12" placeholder="At least 12 characters">
+        <button type="button" id="vault-reveal" class="reveal-btn" aria-label="Show password">Show</button>
+      </div>
+      <p id="gate-message" class="message" role="alert"></p>
+      <button id="vault-submit" class="btn primary lg wide">Unlock vault</button>
+      <button id="vault-demo" class="btn ghost wide">Try a temporary demo <span class="muted">(nothing is saved)</span></button>
+    </section>
+  </div>
+
+  <!-- App shell -->
+  <div id="app" class="shell" hidden>
+    <aside class="sidebar no-print">
+      <div class="brand"><span class="brand-mark">L</span><span>Ledgerly</span></div>
+      <nav id="nav" aria-label="Main">
+        <button class="nav-btn active" data-route="dashboard"><svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm10 8h8V11h-8v10zM3 21h8v-6H3v6zm10-12h8V3h-8v6z"/></svg><span>Overview</span></button>
+        <button class="nav-btn" data-route="builder"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg><span>New document</span></button>
+        <button class="nav-btn" data-route="documents"><svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h10v2H4z"/></svg><span>Documents</span></button>
+        <button class="nav-btn" data-route="pos"><svg viewBox="0 0 24 24"><path d="M7 18a2 2 0 1 0 .001 4.001A2 2 0 0 0 7 18zm10 0a2 2 0 1 0 .001 4.001A2 2 0 0 0 17 18zM7.2 14.6 7.1 15H19v2H7a2 2 0 0 1-1.8-2.9L6.3 12 3 4H1V2h3.3l.9 2H21l-3.6 7.6a2 2 0 0 1-1.8 1.1H8.1zM20 4H6.2l2.5 6h8.4z"/></svg><span>Point of sale</span></button>
+        <button class="nav-btn" data-route="customers"><svg viewBox="0 0 24 24"><path d="M16 11a3 3 0 1 0-3-3 3 3 0 0 0 3 3zm-8 0a3 3 0 1 0-3-3 3 3 0 0 0 3 3zm0 2c-2.3 0-7 1.2-7 3.5V19h14v-2.5C15 14.2 10.3 13 8 13zm8 0c-.3 0-.6 0-1 .1a4.2 4.2 0 0 1 2 3.4V19h6v-2.5c0-2.3-4.7-3.5-7-3.5z"/></svg><span>Customers</span></button>
+        <button class="nav-btn" data-route="products"><svg viewBox="0 0 24 24"><path d="m21 8-9-6-9 6v8l9 6 9-6V8zm-9 1.7L5.6 6 12 1.8 18.4 6 12 9.7z"/></svg><span>Products &amp; stock</span></button>
+        <button class="nav-btn" data-route="expenses"><svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.3-.6-3-1.2-3-2.2 0-1.1 1.1-1.9 2.8-1.9 1.6 0 2.3.8 2.4 1.9h2.1c-.1-1.6-1-3-3-3.5V3h-3v2.2c-1.8.4-3.2 1.6-3.2 3.4 0 2.2 1.8 3.3 4.4 3.9 2.4.6 2.9 1.4 2.9 2.4 0 .7-.5 1.9-2.8 1.9-2.1 0-3-1-3.1-2.2H5.2c.1 2.1 1.7 3.4 3.7 3.8V21h3v-2.1c1.8-.4 3.2-1.4 3.2-3.4 0-2.7-2.3-3.6-4.3-4.1z"/></svg><span>Expenses</span></button>
+        <button class="nav-btn" data-route="recurring"><svg viewBox="0 0 24 24"><path d="M12 4V1L8 5l4 4V6a6 6 0 0 1 5.7 7.8l1.5 1.1A8 8 0 0 0 12 4zm0 14a6 6 0 0 1-5.7-7.8L4.8 9.1A8 8 0 0 0 12 20v3l4-4-4-4v3z"/></svg><span>Recurring</span></button>
+        <button class="nav-btn" data-route="reports"><svg viewBox="0 0 24 24"><path d="M5 21V9h4v12H5zm5 0V3h4v18h-4zm5 0v-8h4v8h-4z"/></svg><span>Reports</span></button>
+        <button class="nav-btn" data-route="business"><svg viewBox="0 0 24 24"><path d="M12 1 3 5v6c0 5.6 3.8 10.7 9 12 5.2-1.3 9-6.4 9-12V5l-9-4zm0 10.9h7a9.2 9.2 0 0 1-6 7.5V19h-1v-7.1H5V19h-1v-7.1h8z"/></svg><span>Business &amp; backup</span></button>
+      </nav>
+      <div class="sidebar-foot">
+        <small id="save-status" class="muted">Vault ready</small>
+        <button id="lock-vault" class="btn ghost sm wide">Lock vault</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar no-print">
+        <div>
+          <p id="page-kicker" class="kicker">Overview</p>
+          <h1 id="page-title">Business at a glance</h1>
+        </div>
+        <div class="top-actions">
+          <button id="quick-new" class="btn primary">+ New invoice</button>
+        </div>
+      </header>
+      <div id="page" class="page-view"></div>
+    </main>
+  </div>
+
+  <!-- Printable layer -->
+  <div id="print-area" class="print-area" aria-hidden="true"></div>
+
+  <div id="toasts" class="toasts no-print" aria-live="polite"></div>
+
+  <script type="module" src="js/app.js"></script>
 </body>
 </html>

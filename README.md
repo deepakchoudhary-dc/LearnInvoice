@@ -1,54 +1,84 @@
 # Ledgerly — Free Offline Invoice Software for Traders and Small Businesses
 
-Ledgerly is built for traders, shop owners, wholesalers, service businesses, freelancers, and small enterprises that need professional invoicing without subscriptions, AI, surveillance, or forced third-party services, will implement advanced features offline.
+Ledgerly is built for traders, shop owners, wholesalers, service businesses, freelancers, and small enterprises that need professional invoicing without subscriptions, AI, surveillance, or forced third-party services.
 
 The goal is simple: give every business access to private, capable invoice software that works on its own machine and keeps financial records under the owner's control.
 
-## Why Ledgerly
+## Quick start
 
-- Works locally and does not depend on a cloud account, AI service, analytics service, payment gateway, font CDN, or PDF CDN.
-- Protects saved data in a password-encrypted local vault.
-- Creates invoices, quotations/proformas, and credit notes.
-- Keeps customer and product/service catalogs with HSN/SAC, GSTIN, tax rates, pricing, and units.
-- Supports GST/VAT/no-tax documents, per-line discounts, multiple currencies, payment instructions, partial payments, overdue tracking, and credit notes.
-- Provides local reports for receivables, customer sales, document history, and audit events.
-- Exports encrypted backups, audit CSV files, and IRP-ready invoice draft JSON.
-- Uses the browser's native Print / Save as PDF flow, so PDF creation also works offline.
+Requires [Node.js](https://nodejs.org) 18 or newer. No build step, no account, no internet needed after install.
 
-## Who it is for
-
-Ledgerly is for people who want billing software that serves their business—not software that sells their financial data, locks their records behind subscriptions, or forces them to rely on AI.
-
-You can use it for a retail shop, wholesale trade, professional service, local manufacturing business, repair center, freelancer practice, or any small business that needs clear invoices and trustworthy records.
-
-## Run locally
-
-```powershell
+```bash
 cd LearnInvoice
 npm install
-npm run start
+npm start
 ```
 
-Open the local URL printed by the server. By default it runs only on `127.0.0.1`.
+Open the URL printed by the server (by default `http://127.0.0.1:3000`), create a vault password of at least 12 characters, and start billing.
+
+> Your vault password cannot be recovered. Keep it in a password manager and keep encrypted backups in a separate safe location.
+
+## Features
+
+- **Invoices, quotations, proformas, credit notes** with per-line discounts, shipping, round-off and inclusive/exclusive tax pricing.
+- **GST-ready** — HSN/SAC, GSTIN, CGST/SGST/IGST split by place of supply, amount in words, IRP-ready draft JSON export.
+- **Point of sale** — barcode scanning, tap-to-bill catalog, walk-in customers, instant print receipt.
+- **Inventory** — stock tracking, reorder levels, low-stock alerts.
+- **Customers** — directory, credit limits, outstanding balances.
+- **Expenses & recurring invoices** — log money going out; automate rent/subscription billing.
+- **Reports** — sales by month, expenses by category, outstanding aging, GST liability, best sellers, audit trail. All exportable to CSV.
+- **Encrypted backups** — AES-GCM backup files protected with their own password.
+- **Works offline** — PDF creation uses the browser's native Print → Save as PDF.
+
+## Where your data lives
+
+Everything is stored **only on your computer**, inside the browser you use:
+
+- Business records are AES-GCM encrypted in an IndexedDB database (`OfflineInvoiceDB`) using your vault password.
+- Only non-secret key-derivation metadata (a random salt) is kept in localStorage.
+
+Nothing is ever sent anywhere. The bundled server only serves the app files to your own machine (`127.0.0.1`).
+
+## Deleting / resetting local data
+
+Two ways:
+
+1. **In the app** — go to *Business & backup → Vault → "Erase all data…"*. It asks for confirmation twice, then wipes every record.
+2. **Manually** — open DevTools (F12) → *Application* tab:
+   - *Storage → IndexedDB* → delete the `OfflineInvoiceDB` database.
+   - *Local Storage* → remove the `vault_salt` and `vault_kdf_iterations` keys.
+
+Or simply clear site data for `127.0.0.1:3000` from your browser settings. After erasing, the app behaves like a fresh install and asks you to create a new vault.
 
 ## India GST / e-invoice note
 
 Ledgerly can prepare, audit, print, and export invoice data offline. It can export an IRP-ready draft, but an official IRN and signed QR code must still be issued by the authorised Invoice Registration Portal.
 
-## Protect your records
-
-Your vault password cannot be recovered. Keep it in a password manager and keep encrypted backups in a separate safe location.
-
 ## Development checks
 
-```powershell
-npm test
-npm audit --omit=dev --audit-level=moderate
+```bash
+npm test        # unit tests for math, GST, documents, CSV, backup
+npm run lint    # TypeScript type check
+```
+
+## Project structure
+
+```
+LearnInvoice/
+├── public/
+│   ├── index.html          # app shell + vault gate
+│   ├── style.css           # design system
+│   └── js/
+│       ├── app.js          # router, views, actions
+│       └── modules/        # domain logic: state, crypto, documents,
+│                           # gst math, reports, backup, csv, validation
+├── src/server.ts           # tiny static file server (Express)
+└── src/tests/              # plain Node test scripts
 ```
 
 ## Contributing
 
-Contributions are welcome. Keep the project offline-first, privacy-first, accessible to small businesses, and free from compulsory AI or third-party service dependencies.
+Contributions are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md). Keep the project offline-first, privacy-first, accessible to small businesses, and free from compulsory AI or third-party service dependencies.
 
 ## License
 

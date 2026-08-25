@@ -44,6 +44,18 @@ export function saveRecurringTemplate(input) {
   return template;
 }
 
+export function addMonthsClamped(dateStr, months) {
+  const source = new Date(`${dateStr}T00:00:00`);
+  const target = months === 0
+    ? new Date(source.getTime() + 7 * 86400000)
+    : new Date(source.getFullYear(), source.getMonth() + months, Math.min(source.getDate(), daysInMonth(source.getFullYear(), source.getMonth() + months)));
+  return `${target.getFullYear()}-${String(target.getMonth() + 1).padStart(2, '0')}-${String(target.getDate()).padStart(2, '0')}`;
+}
+
+function daysInMonth(year, monthIndex) {
+  return new Date(year, monthIndex + 1, 0).getDate();
+}
+
 export function generateDueRecurring(today = new Date().toISOString().slice(0, 10)) {
   const state = getState();
   const created = [];
@@ -62,11 +74,8 @@ export function generateDueRecurring(today = new Date().toISOString().slice(0, 1
     invoice.recurringTemplateId = template.id;
     state.documents.push(invoice);
 
-    const next = new Date(`${template.nextDate}T00:00:00`);
-    next.setMonth(
-      next.getMonth() + (template.frequency === 'quarterly' ? 3 : template.frequency === 'yearly' ? 12 : 1)
-    );
-    template.nextDate = next.toISOString().slice(0, 10);
+    const months = template.frequency === 'quarterly' ? 3 : template.frequency === 'yearly' ? 12 : template.frequency === 'weekly' ? 0 : 1;
+    template.nextDate = addMonthsClamped(template.nextDate, months);
     created.push(invoice);
     addAudit('recurring.generated', 'document', invoice.id, template.name);
   }

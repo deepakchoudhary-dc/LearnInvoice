@@ -2,6 +2,9 @@
   "name": "ledgerly-offline-invoice-vault",
   "version": "0.1.0",
   "private": true,
+  "description": "Free, offline-first, privacy-first invoicing and billing for small businesses. Encrypted local vault, GST-ready invoices, POS, reports — no cloud, no accounts.",
+  "keywords": ["invoice", "invoicing", "billing", "pos", "gst", "offline-first", "privacy", "small-business"],
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "start": "tsx src/server.ts",
